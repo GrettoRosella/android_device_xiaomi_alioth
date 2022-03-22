@@ -37,8 +37,13 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         if (!intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             return;
         }
-        if (DEBUG) Log.d(TAG, "Received boot completed intent");
-        DiracUtils.initialize(context);
+        if (DEBUG)
+            Log.d(TAG, "Received boot completed intent");
+        try {
+            DiracUtils.getInstance(context);
+        } catch (Exception e) {
+            Log.d(TAG, "Dirac is not present in system");
+        }
         DozeUtils.checkDozeService(context);
         ThermalUtils.startService(context);
         TouchSamplingUtils.restoreSamplingValue(context);
